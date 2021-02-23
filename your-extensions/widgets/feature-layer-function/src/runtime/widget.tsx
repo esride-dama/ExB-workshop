@@ -23,90 +23,90 @@ const { useState, useEffect, useRef } = React;
 /**
  * This widget will show features from a configured feature layer
  */
-export default function Widget(props: AllWidgetProps<{}>){
-  const [query, setQuery] = useState<FeatureLayerQueryParams>(null);
-  const cityNameRef = useRef<HTMLInputElement>(null);
+export default function Widget(props: AllWidgetProps<{}>) {
+    const [query, setQuery] = useState<FeatureLayerQueryParams>(null);
+    const cityNameRef = useRef<HTMLInputElement>(null);
 
-  useEffect(() => {
-    queryFunc();
-  }, []);
+    useEffect(() => {
+        queryFunc();
+    }, []);
 
-  const isDsConfigured = () => {
-    if (props.useDataSources &&
-      props.useDataSources.length === 1 &&
-      props.useDataSources[0].fields &&
-      props.useDataSources[0].fields.length === 1) {
-      return true;
-    }
-    return false;
-  }
-
-  const queryFunc = () => {
-    if (!isDsConfigured()) {
-      return;
-    }
-    const fieldName = props.useDataSources[0].fields[0];
-    const w = cityNameRef.current && cityNameRef.current.value ?
-      `${fieldName} like '%${cityNameRef.current.value}%'` : '1=1';
-    setQuery({
-      where: w,
-      outFields: ['*'],
-      pageSize: 10
-    });
-  }
-
-  const dataRender = (ds: DataSource, info: IMDataSourceInfo) => {
-    //createOutputDs(ds);
-    const fName = props.useDataSources[0].fields[0];
-    return <>
-      <div>
-        <input placeholder="Query value" ref={cityNameRef} />
-        <button onClick={queryFunc}>Query</button>
-      </div>
-      <div>Query state: {info.status}</div>
-      <div>Count: {ds.count}</div>
-
-      <div className="record-list" style={{ width: '100%', marginTop: '20px', height: 'calc(100% - 80px)', overflow: 'auto' }}>
-        {
-          ds && ds.getStatus() === DataSourceStatus.Loaded ? ds.getRecords().map((r, i) => {
-            return <div key={i}>{r.getData()[fName]}</div>
-          }) : null
+    const isDsConfigured = () => {
+        if (props.useDataSources &&
+            props.useDataSources.length === 1 &&
+            props.useDataSources[0].fields &&
+            props.useDataSources[0].fields.length === 1) {
+            return true;
         }
-      </div>
-    </>
-  }
-
-  const createOutputDs = (useDs: DataSource) => {
-    if (!props.outputDataSources) {
-      return;
+        return false;
     }
-    const outputDsId = props.outputDataSources[0];
-    const dsManager = DataSourceManager.getInstance();
-    if (dsManager.getDataSource(outputDsId)) {
-      if (dsManager.getDataSource(outputDsId).getDataSourceJson().originDataSources[0].dataSourceId !== useDs.id) {
-        dsManager.destroyDataSource(outputDsId);
-      }
-    }
-    dsManager.createDataSource(outputDsId).then(ods => {
-      ods.setRecords(useDs.getRecords());
-    });
-  }
 
-  if (!isDsConfigured()) {
-    return <h3>
-      This widget demonstrates how to use a feature layer as a data source.
+    const queryFunc = () => {
+        if (!isDsConfigured()) {
+            return;
+        }
+        const fieldName = props.useDataSources[0].fields[0];
+        const w = cityNameRef.current && cityNameRef.current.value ?
+            `${fieldName} like '%${cityNameRef.current.value}%'` : '1=1';
+        setQuery({
+            where: w,
+            outFields: ['*'],
+            pageSize: 10
+        });
+    }
+
+    const dataRender = (ds: DataSource, info: IMDataSourceInfo) => {
+        //createOutputDs(ds);
+        const fName = props.useDataSources[0].fields[0];
+        return <>
+            <div>
+                <input placeholder="Query value" ref={cityNameRef} />
+                <button onClick={queryFunc}>Query</button>
+            </div>
+            <div>Query state: {info.status}</div>
+            <div>Count: {ds.count}</div>
+
+            <div className="record-list" style={{ width: '100%', marginTop: '20px', height: 'calc(100% - 80px)', overflow: 'auto' }}>
+                {
+                    ds && ds.getStatus() === DataSourceStatus.Loaded ? ds.getRecords().map((r, i) => {
+                        return <div key={i}>{r.getData()[fName]}</div>
+                    }) : null
+                }
+            </div>
+        </>
+    }
+
+    const createOutputDs = (useDs: DataSource) => {
+        if (!props.outputDataSources) {
+            return;
+        }
+        const outputDsId = props.outputDataSources[0];
+        const dsManager = DataSourceManager.getInstance();
+        if (dsManager.getDataSource(outputDsId)) {
+            if (dsManager.getDataSource(outputDsId).getDataSourceJson().originDataSources[0].dataSourceId !== useDs.id) {
+                dsManager.destroyDataSource(outputDsId);
+            }
+        }
+        dsManager.createDataSource(outputDsId).then(ods => {
+            ods.setRecords(useDs.getRecords());
+        });
+    }
+
+    if (!isDsConfigured()) {
+        return <h6>
+            This function widget demonstrates how to use a feature layer as a data source.
       <br />
       Configure the data source.
-    </h3>;
-  }
-  return <div className="widget-use-feature-layer" style={{ width: '100%', height: '100%', maxHeight: '800px', overflow: 'auto' }}>
-    <h3>
-      This widget shows how to use a feature layer as a data source.
-    </h3>
+    </h6>;
+    }
+    return <div className="widget-use-feature-layer" style={{ width: '100%', height: '100%', maxHeight: '800px', overflow: 'auto' }}>
+        <h6>
+            This function widget shows how to use a feature layer as a data source.
+    </h6>
 
-    <DataSourceComponent useDataSource={props.useDataSources[0]} query={query} widgetId={props.id} queryCount>
-      {dataRender}
-    </DataSourceComponent>
-  </div>;
+        <DataSourceComponent useDataSource={props.useDataSources[0]} query={query} widgetId={props.id} queryCount>
+            {dataRender}
+        </DataSourceComponent>
+    </div>;
 }
 
