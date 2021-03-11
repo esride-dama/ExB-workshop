@@ -1,0 +1,11 @@
+{
+  "w3wApiKey": "",
+  "w3wOnMap": false,
+  "showW3wSquare": false,
+  "categories": {
+    "name1": ["lyr1", "lyr2"],
+    "name2": ["lyr3"],
+    "blabla": ["lyr4", "lyr5"],
+    "blubb": ["lyr6", "lyr7", "lyr8"]
+  }
+}

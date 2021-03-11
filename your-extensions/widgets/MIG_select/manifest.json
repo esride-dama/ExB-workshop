@@ -1,0 +1,22 @@
+{
+  "name": "MIG Select",
+  "label": "MIG Select",
+  "type": "widget",
+  "dependency": [
+    "jimu-arcgis"
+  ],
+  "version": "1.0.0",
+  "exbVersion": "1.0.0",
+  "author": "Esri Deutschland GmbH",
+  "description": "Dropdown list with webmap layer categories and filter",
+  "copyright": "",
+  "license": "http://www.apache.org/licenses/LICENSE-2.0",
+  "defaultSize": {
+    "width": 400,
+    "height": 400
+  },
+  "translatedLocales": [
+    "en",
+    "de"
+  ]
+}
